@@ -36,8 +36,23 @@ public with sharing class peterCompiTest {
         system.assertEquals(80,
             peterCompi.buildTree(new Tokenizer('8 + 8 + 8 * 8').tokenize()).eval());
 
+        // paranthesis
+        system.assertEquals(8,
+            peterCompi.buildTree(new Tokenizer('(3+5)').tokenize()).eval());
 
-            
+        system.assertEquals(80,
+            peterCompi.buildTree(new Tokenizer('(3+5)*10').tokenize()).eval());
+
+        system.assertEquals(800,
+            peterCompi.buildTree(new Tokenizer('10 * (3+5)*10').tokenize()).eval());
+
+        system.assertEquals(36,
+            peterCompi.buildTree(new Tokenizer('(2+4) * (3+3)').tokenize()).eval());
+
+        system.assertEquals(50,
+            peterCompi.buildTree(new Tokenizer('((2*2) + 1) + 10').tokenize()).eval());
+
+
     }
 
 }

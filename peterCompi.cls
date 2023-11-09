@@ -1,60 +1,4 @@
 public with sharing class peterCompi {
- 
-
-    // static String[] numberCharlist = '0123456789'.split('');
-    // static String[] separatorCharList = ' '.split('');
-    
-    // static String[] operatorCharList = '+-*/'.split('');
-    // static String[] paranthesisCharList = '()'.split('');
-
-
-
-    // public static Token[] tokenize(String inp) {
-    //     inp = inp + ' ';
-        
-    //     Token[] tokenList = new Token[]{};
-        
-    //     String[] collector = new String[]{};
-    //     String what;
-    //     for (String s : inp.split('')) {
-    //         if (operatorCharList.contains(s)) {
-    //             what = 'op';
-    //         }
-    //         if (paranthesisCharList.contains(s)) {
-    //             what = 'par';
-    //         }
-    //         if (numberCharlist.contains(s)) {
-    //             what = 'num';
-    //         }
-    //         if (separatorCharList.contains(s)) {
-    //             what = 'sep';
-    //         }
-
-    //         if ((what == 'sep' || what == 'op' || what == 'par')
-    //             && !collector.isEmpty()
-    //         ) {
-    //             tokenList.add(new NumberToken(String.join(collector, '')));
-    //             collector = new String[]{};
-    //         }
-
-
-    //         if (what == 'op') {
-    //             tokenList.add(new Token.OperatorToken(s));
-    //             continue;
-    //         }
-
-    //         if (what == 'par') {
-    //             tokenList.add(new ParanthesisToken(s));
-    //             continue;
-    //         }
-
-    //         if (what == 'num') {
-    //             collector.add(s);
-    //         }
-    //     }
-
-    //     return tokenList;
-    // }
 
 
     public class Expression implements Token.IEval {
@@ -72,6 +16,44 @@ public with sharing class peterCompi {
     public static Expression buildTree(Token.IEval[] tokenList) {
 
         Token.IEval[] tl = new List<Token.IEval>(tokenList);
+
+        // move paranthesises to expressions
+        Boolean paranthesisFound;
+        do {
+            paranthesisFound = false;
+
+            Integer j = 0;
+            Integer parStartInd;
+            Integer parEndInd;
+    
+            for (j = 0; j < tl.size(); j++) {
+                if (tl[j] instanceOf Token.ParanthesisToken) {
+                    if (((Token.ParanthesisToken) tl[j]).isOpen()) {
+                        parStartInd = j;
+                    } else {
+                        parEndInd = j;
+                        break;
+                    }
+                }
+            }
+
+            if (parStartInd != null && parEndInd != null) {
+                paranthesisFound = true;
+                Token.IEval[] tokensInParans = new Token.IEval[]{};
+                for (Integer i = parStartInd+1; i<parEndInd; i++) {
+                    tokensInParans.add(tl[i]);
+                }
+
+                Expression expressionInParanthesis = buildTree(tokensInParans);
+                
+                // remove the paranthesis
+                for (Integer k = parStartInd; k<parEndInd; k++) {
+                    tl.remove(parStartInd);
+                }
+                //put the expr.
+                tl[parStartInd] = expressionInParanthesis;
+            }
+        } while(paranthesisFound);
 
         // move 0 level operators to expressions
         Integer i = 1;

@@ -40,7 +40,7 @@ public with sharing class Tokenizer {
 
     private Boolean askParanthesis() {
         if (paranthesisCharList.contains(this.getChar())) {
-            tokenList.add(new Token.OperatorToken(this.getChar()));
+            tokenList.add(new Token.ParanthesisToken(this.getChar()));
             this.step();
             return true;
         }
@@ -83,8 +83,8 @@ public with sharing class Tokenizer {
 
         while(this.pos < this.rawCode.length()) {
             if (this.askOperator()) {} 
-            if (this.askParanthesis()) {} 
-            if (this.askVariableName()) {} 
+            else if (this.askParanthesis()) {} 
+            else if (this.askVariableName()) {} 
             else if (this.askNumber()) {}
             else {
                 step();

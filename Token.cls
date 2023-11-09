@@ -66,6 +66,10 @@ public with sharing class Token {
         public ParanthesisToken(String what) {
             super(what);
         }
+
+        public Boolean isOpen() {
+            return this.what == '(' ? true : false;
+        }
     }
 
 }

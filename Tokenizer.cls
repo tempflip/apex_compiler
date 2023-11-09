@@ -90,7 +90,7 @@ public with sharing class Tokenizer {
                 step();
             }
         }
-        system.assert(false, 'xxxx' + this.tokenList);
+        // system.assert(false, 'xxxx' + this.tokenList);
 
         return this.tokenList;
     

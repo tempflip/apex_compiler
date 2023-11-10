@@ -32,7 +32,34 @@ public with sharing class TokenizerTest {
         system.assert(tokens[2] instanceOf Token.NumberToken);
         system.assertEquals('3899', tokens[0].what);
         system.assertEquals('*', tokens[1].what);
-        system.assertEquals('125', tokens[2].what);
-        
+        system.assertEquals('125', tokens[2].what);   
     }
+
+    @isTest
+    public static void test_invalid() {
+
+        Boolean catched = false;
+        try {
+            Token.AbstractToken[] tokens = new Tokenizer('|').tokenize();
+        } catch(Tokenizer.TokenizerException e) {
+            catched = true;
+        }
+
+        catched = false;
+        try {
+            Token.AbstractToken[] tokens = new Tokenizer('1 + 2$').tokenize();
+        } catch(Tokenizer.TokenizerException e) {
+            catched = true;
+        }
+
+        catched = false;
+        try {
+            Token.AbstractToken[] tokens = new Tokenizer('    1  #2').tokenize();
+        } catch(Tokenizer.TokenizerException e) {
+            catched = true;
+        }
+
+        system.assert(catched);
+    }
+
 }

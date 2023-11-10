@@ -1,7 +1,11 @@
 public with sharing class Tokenizer {
+
+    public class TokenizerException extends Exception {}
+
+
     static String[] numberCharlist = '0123456789'.split('');
     static String[] variableCharList = 'ABCDEFG'.split('');
-    // static String[] separatorCharList = ' '.split('');
+    static String[] separatorCharList = ' '.split('');
     
     static String[] operatorCharList = '+-*/'.split('');
     static String[] paranthesisCharList = '()'.split('');
@@ -77,7 +81,13 @@ public with sharing class Tokenizer {
         return false;
     }
 
-
+    private Boolean askSeparator() {
+        if (separatorCharList.contains(this.getChar())) {
+            this.step();
+            return true;
+        }
+        return false;
+    }
 
     public Token.AbstractToken[] tokenize() {
 
@@ -86,8 +96,10 @@ public with sharing class Tokenizer {
             else if (this.askParanthesis()) {} 
             else if (this.askVariableName()) {} 
             else if (this.askNumber()) {}
+            else if (this.askSeparator()) {}
             else {
-                step();
+                throw new TokenizerException('Invalid char: ' + this.getChar());
+                // step();
             }
         }
         // system.assert(false, 'xxxx' + this.tokenList);

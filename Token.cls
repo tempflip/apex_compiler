@@ -1,7 +1,7 @@
 public with sharing class Token {
 
     public interface IEval {
-        Integer eval();
+        Integer eval(RunningContext runningContext);
     }
 
  
@@ -12,7 +12,7 @@ public with sharing class Token {
             this.what = what;
         }
 
-        public virtual Integer eval() {
+        public virtual Integer eval(RunningContext runningContext) {
             system.assert(false, 'impplement eval!');
             return null;
         }
@@ -23,7 +23,7 @@ public with sharing class Token {
             super(what);
         }
 
-        public override Integer eval() {
+        public override Integer eval(RunningContext runningContext) {
             return Integer.valueOf(this.what);
         }
     }
@@ -31,6 +31,10 @@ public with sharing class Token {
     public class VariableNameToken extends AbstractToken {
         public VariableNameToken(String what) {
             super(what);
+        }
+
+        public override Integer eval(RunningContext runningContext) {
+            return (Integer) runningContext.getVarValue(this.what);
         }
     }
 

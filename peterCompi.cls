@@ -5,9 +5,23 @@ public with sharing class peterCompi {
         public Token.IEval leftArg;
         public Token.OperatorToken operator;
         public Token.IEval rightArg;
+        public RunningContext runningContext;
 
-        public Integer eval() {
-            return this.operator.run(leftArg.eval(), rightArg.eval());
+        public Expression() {}
+
+        // public Expression(RunningContext ctx) {
+            // this.ctx = ctx;
+        // }
+
+        public Integer eval(RunningContext runningContext) {
+            // if (leftArg instanceof Token.VariableNameToken) {
+                // ((Token.VariableNameToken)leftArg).passContext(runningContext);
+            // }
+            // if (rightArg instanceof Token.VariableNameToken) {
+                // ((Token.VariableNameToken)rightArg).passContext(runningContext);
+            // }
+            
+            return this.operator.run(leftArg.eval(runningContext), rightArg.eval(runningContext));
         }
 
     }
